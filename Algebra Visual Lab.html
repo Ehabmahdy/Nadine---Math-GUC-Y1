@@ -1,0 +1,474 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Algebra Visual Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: graph-paper notebook — sticky topic tabs, one "lab card" per topic with an interactive figure beside the explanation, quiz at the end */
+:root{
+  --paper:#f6f8fc; --grid:#dfe6f3; --card:#ffffff; --ink:#1b2440; --muted:#5a6685;
+  --blue:#2346c9; --blue-soft:#e3e9fb; --hi:#ffd84a; --hi-soft:#fff3c2;
+  --good:#1f8a5b; --good-soft:#dcf3e7; --bad:#c23b4a; --bad-soft:#fbe3e6; --line:#c9d3e8;
+  --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible",ui-sans-serif,system-ui,sans-serif;
+  --f-math:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#111827; --grid:#1c2639; --card:#172034; --ink:#e8edf8; --muted:#9aa7c4;
+  --blue:#8aa6ff; --blue-soft:#22305a; --hi:#ffd84a; --hi-soft:#3d3416;
+  --good:#5fd39d; --good-soft:#163a2b; --bad:#ff8592; --bad-soft:#47202a; --line:#2c3a57; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#111827; --grid:#1c2639; --card:#172034; --ink:#e8edf8; --muted:#9aa7c4;
+  --blue:#8aa6ff; --blue-soft:#22305a; --hi:#ffd84a; --hi-soft:#3d3416;
+  --good:#5fd39d; --good-soft:#163a2b; --bad:#ff8592; --bad-soft:#47202a; --line:#2c3a57; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
+header.hero{padding-block:12px 20px}
+.eyebrow{font-family:var(--f-math);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue)}
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(34px,6vw,58px);line-height:1.02;margin:.2em 0 .3em;text-wrap:balance}
+h1 mark{background:linear-gradient(transparent 55%,var(--hi) 55%);color:inherit;padding:0 .1em}
+.lede{max-width:62ch;color:var(--muted);margin:0}
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);display:flex;gap:8px;overflow-x:auto;padding-block:10px;margin-bottom:8px;border-bottom:1px solid var(--line)}
+nav.tabs a{flex:none;font-family:var(--f-math);font-size:13px;text-decoration:none;color:var(--ink);border:1px solid var(--line);background:var(--card);padding:6px 12px;border-radius:999px}
+nav.tabs a:hover,nav.tabs a:focus-visible{border-color:var(--blue);color:var(--blue);outline:none}
+section.lab{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:clamp(18px,3vw,32px);margin-top:28px;scroll-margin-top:70px}
+.lab-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.num{font-family:var(--f-math);font-weight:700;color:var(--blue);font-size:14px}
+h2{font-family:var(--f-display);font-weight:800;font-size:clamp(24px,3.4vw,34px);line-height:1.1;margin:0;text-wrap:balance}
+.big-idea{margin:14px 0 18px;padding:12px 16px;background:var(--hi-soft);border-radius:10px;max-width:70ch}
+.big-idea b{font-family:var(--f-math);font-size:12px;letter-spacing:.08em;text-transform:uppercase;display:block;color:var(--ink);opacity:.75}
+.grid2{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:760px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.figure{border:1px dashed var(--line);border-radius:12px;padding:14px;background:var(--paper)}
+.figure svg{width:100%;height:auto;display:block;overflow:visible}
+.fig-cap{font-size:14px;color:var(--muted);margin-top:8px}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}
+.controls label{font-size:14px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{font-family:var(--f-math);font-size:15px;border:0;background:var(--card);color:var(--ink);padding:6px 12px;cursor:pointer;min-width:40px}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--blue);color:var(--card)}
+.btn{font-family:var(--f-body);font-weight:700;font-size:15px;border:1px solid var(--blue);background:var(--blue);color:var(--card);padding:8px 14px;border-radius:8px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--blue)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--hi);outline-offset:2px}
+input[type=range]{accent-color:var(--blue);width:150px}
+.readout{font-family:var(--f-math);font-size:clamp(18px,2.6vw,24px);font-weight:700;margin:4px 0 0}
+.readout .dim{color:var(--muted);font-weight:500;font-size:.75em}
+.math{font-family:var(--f-math);font-size:.95em;background:var(--blue-soft);padding:1px 6px;border-radius:5px;white-space:nowrap}
+.rules{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:16px}
+.rule{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--card)}
+.rule .f{font-family:var(--f-math);font-weight:700;color:var(--blue)}
+.rule .w{font-size:14px;color:var(--muted)}
+.rule .e{font-family:var(--f-math);font-size:14px}
+.tip{border-left:4px solid var(--bad);background:var(--bad-soft);padding:8px 12px;border-radius:0 8px 8px 0;margin-top:14px;font-size:15px}
+.steps{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:8px}
+.steps li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:start;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);transition:opacity .3s}
+.steps li.off{opacity:.25}
+.steps .k{font-family:var(--f-math);font-weight:700;color:var(--card);background:var(--blue);border-radius:50%;width:24px;height:24px;display:grid;place-items:center;font-size:13px}
+.steps .m{font-family:var(--f-math);font-weight:700}
+p{max-width:68ch}
+/* quiz */
+.q{border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:14px;background:var(--card)}
+.q h3{font-family:var(--f-body);font-size:17px;margin:0 0 10px}
+.q h3 .qn{font-family:var(--f-math);color:var(--blue);margin-right:8px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}
+.opts button{font-family:var(--f-math);font-size:15px;text-align:left;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:10px 12px;border-radius:8px;cursor:pointer}
+.opts button:hover:not(:disabled){border-color:var(--blue)}
+.opts button.right{background:var(--good-soft);border-color:var(--good);color:var(--ink)}
+.opts button.wrong{background:var(--bad-soft);border-color:var(--bad);color:var(--ink)}
+.opts button:disabled{cursor:default}
+.fb{margin-top:10px;font-size:15px}
+.fb b.ok{color:var(--good)} .fb b.no{color:var(--bad)}
+.score{position:sticky;bottom:calc(12px + env(safe-area-inset-bottom,0px));margin-top:18px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;background:var(--ink);color:var(--paper);padding:12px 16px;border-radius:12px}
+.score .meter{flex:1 1 160px;height:10px;background:color-mix(in srgb,var(--paper) 25%,transparent);border-radius:99px;overflow:hidden}
+.score .meter i{display:block;height:100%;width:0;background:var(--hi);transition:width .4s}
+.score b{font-family:var(--f-math)}
+.score .btn{background:var(--hi);border-color:var(--hi);color:#1b2440}
+footer{margin-top:40px;color:var(--muted);font-size:14px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+/* svg tokens */
+.s-axis{stroke:var(--ink);stroke-width:2}
+.s-tick{stroke:var(--muted);stroke-width:1}
+.s-lbl{fill:var(--muted);font-family:var(--f-math);font-size:12px}
+.s-lbl-b{fill:var(--ink);font-family:var(--f-math);font-size:13px;font-weight:700}
+.s-shade{stroke:var(--blue);stroke-width:8;stroke-linecap:round;opacity:.85}
+.s-dot{stroke:var(--blue);stroke-width:3}
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Pre-calculus foundations · 5 topics · 10-question quiz</div>
+    <h1>Algebra, <mark>drawn out</mark> so it finally clicks</h1>
+    <p class="lede">Each topic has one big idea and a figure you can play with. Move the sliders, press the buttons, and watch the math change. When you're ready, try the quiz at the bottom.</p>
+  </header>
+
+  <nav class="tabs" aria-label="Topics">
+    <a href="#line">1 · Number line</a><a href="#abs">2 · Absolute value</a><a href="#exp">3 · Exponents</a><a href="#fact">4 · Factoring</a><a href="#frac">5 · Fractions</a><a href="#quiz">Quiz</a>
+  </nav>
+
+  <!-- 1 -->
+  <section class="lab" id="line">
+    <div class="lab-head"><span class="num">TOPIC 1</span><h2>The real number line &amp; inequalities</h2></div>
+    <div class="big-idea"><b>Big idea</b>Numbers grow to the right. An inequality isn't one number, it's a whole stretch of the line.</div>
+    <div class="grid2">
+      <div class="figure">
+        <div class="controls">
+          <div class="seg" id="ineqOp" role="group" aria-label="Inequality sign">
+            <button data-op="<" aria-pressed="true">&lt;</button><button data-op="≤">≤</button><button data-op=">">&gt;</button><button data-op="≥">≥</button>
+          </div>
+          <label for="ineqVal">value <input id="ineqVal" type="range" min="-8" max="8" value="3"></label>
+        </div>
+        <svg id="lineSvg" viewBox="0 0 640 110" role="img" aria-label="Number line showing the inequality"></svg>
+        <div class="readout" id="ineqRead"></div>
+        <div class="controls" style="margin-top:10px"><button class="btn ghost" id="flipBtn">Multiply both sides by −1</button></div>
+        <div class="fig-cap" id="flipCap">Open circle = endpoint not included. Filled dot = included.</div>
+      </div>
+      <div>
+        <p><b>Brackets:</b> <span class="math">[ ]</span> means the endpoint is included (≤, ≥). <span class="math">( )</span> means it isn't (&lt;, &gt;). Infinity always gets <span class="math">( )</span> because you never reach it.</p>
+        <p><b>The one extra rule:</b> solving an inequality is like solving an equation, except when you multiply or divide by a negative number, you <b>flip the sign</b>. Press the button in the figure to see why: multiplying by −1 mirrors the line, so the shaded side swaps.</p>
+        <ul class="steps">
+          <li><span class="k">1</span><span>Solve <span class="m">−3x + 4 &gt; 10</span></span></li>
+          <li><span class="k">2</span><span>Subtract 4: <span class="m">−3x &gt; 6</span></span></li>
+          <li><span class="k">3</span><span>Divide by −3 and flip: <span class="m">x &lt; −2</span> → <span class="m">(−∞, −2)</span></span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="lab" id="abs">
+    <div class="lab-head"><span class="num">TOPIC 2</span><h2>Absolute value</h2></div>
+    <div class="big-idea"><b>Big idea</b>|something| means distance from zero, and a distance is never negative. |x − c| is the distance between x and c.</div>
+    <div class="grid2">
+      <div class="figure">
+        <div class="controls">
+          <div class="seg" id="absOp" role="group" aria-label="Type of problem">
+            <button data-op="=" aria-pressed="true">=</button><button data-op="<">&lt;</button><button data-op=">">&gt;</button>
+          </div>
+          <label for="absC">centre c <input id="absC" type="range" min="-4" max="4" value="0"></label>
+          <label for="absA">distance a <input id="absA" type="range" min="1" max="5" value="3"></label>
+        </div>
+        <svg id="absSvg" viewBox="0 0 640 140" role="img" aria-label="Absolute value as distance on the number line"></svg>
+        <div class="readout" id="absRead"></div>
+      </div>
+      <div>
+        <p>Every absolute value problem is one of three shapes. Picture walking <b>a</b> steps away from the centre:</p>
+        <div class="rules" style="grid-template-columns:minmax(0,1fr)">
+          <div class="rule"><div class="f">|x| = a</div><div class="w">exactly a steps away → two points</div><div class="e">x = a or x = −a</div></div>
+          <div class="rule"><div class="f">|x| &lt; a</div><div class="w">closer than a → one piece in the middle</div><div class="e">−a &lt; x &lt; a</div></div>
+          <div class="rule"><div class="f">|x| &gt; a</div><div class="w">further than a → two pieces outside</div><div class="e">x &lt; −a or x &gt; a</div></div>
+        </div>
+        <div class="tip"><b>Trap:</b> |x| = −4 has no solution. A distance can't be negative.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="lab" id="exp">
+    <div class="lab-head"><span class="num">TOPIC 3</span><h2>Exponents &amp; roots</h2></div>
+    <div class="big-idea"><b>Big idea</b>An exponent counts repeated multiplication. Each step right multiplies by the base; each step left divides by it. That's why 2⁰ = 1 and 2⁻³ = 1/8.</div>
+    <div class="grid2">
+      <div class="figure">
+        <div class="controls">
+          <label for="expBase">base <input id="expBase" type="range" min="2" max="4" value="2"></label>
+          <span class="fig-cap" style="margin:0">Tap a bar to see its value</span>
+        </div>
+        <svg id="expSvg" viewBox="0 0 640 280" role="img" aria-label="Powers of the base from exponent minus 3 to 4, on a log scale"></svg>
+        <div class="readout" id="expRead"></div>
+        <div class="fig-cap">Bars use a ratio scale: every step is the same height because every step multiplies by the same base.</div>
+      </div>
+      <div>
+        <div class="rules">
+          <div class="rule"><div class="f">aᵐ · aⁿ = aᵐ⁺ⁿ</div><div class="w">multiply → add powers</div><div class="e">x²·x³ = x⁵</div></div>
+          <div class="rule"><div class="f">aᵐ ÷ aⁿ = aᵐ⁻ⁿ</div><div class="w">divide → subtract powers</div><div class="e">x⁷÷x² = x⁵</div></div>
+          <div class="rule"><div class="f">(aᵐ)ⁿ = aᵐⁿ</div><div class="w">power of a power → multiply</div><div class="e">(x²)³ = x⁶</div></div>
+          <div class="rule"><div class="f">a⁰ = 1</div><div class="w">zero power is always 1</div><div class="e">5⁰ = 1</div></div>
+          <div class="rule"><div class="f">a⁻ⁿ = 1/aⁿ</div><div class="w">negative → flip to a fraction</div><div class="e">2⁻³ = 1/8</div></div>
+          <div class="rule"><div class="f">a^(m/n) = (ⁿ√a)ᵐ</div><div class="w">bottom = root, top = power</div><div class="e">8^(2/3) = 2² = 4</div></div>
+        </div>
+        <div class="tip"><b>Trap:</b> √(a + b) is NOT √a + √b. Check: √(9+16) = √25 = 5, not 3 + 4 = 7.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="lab" id="fact">
+    <div class="lab-head"><span class="num">TOPIC 4</span><h2>Factoring polynomials</h2></div>
+    <div class="big-idea"><b>Big idea</b>Factoring is multiplying backwards. x² + 5x + 6 is the area of a rectangle; factoring finds its two side lengths, (x + 2) and (x + 3).</div>
+    <div class="grid2">
+      <div class="figure">
+        <div class="controls">
+          <div class="seg" id="factPick" role="group" aria-label="Choose a trinomial">
+            <button data-p="2" data-q="3" aria-pressed="true">x²+5x+6</button><button data-p="3" data-q="4">x²+7x+12</button><button data-p="1" data-q="5">x²+6x+5</button><button data-p="2" data-q="4">x²+6x+8</button>
+          </div>
+        </div>
+        <svg id="factSvg" viewBox="0 0 640 330" role="img" aria-label="Area model of the trinomial"></svg>
+        <div class="readout" id="factRead"></div>
+        <div class="fig-cap">The two numbers p and q must <b>multiply to c</b> (the small corner square) and <b>add to b</b> (the two strips).</div>
+      </div>
+      <div>
+        <p><b>Always in this order:</b></p>
+        <ul class="steps">
+          <li><span class="k">1</span><span><b>Common factor first.</b> <span class="m">6x³ + 9x² = 3x²(2x + 3)</span></span></li>
+          <li><span class="k">2</span><span><b>Count the terms</b> and pick the pattern below.</span></li>
+          <li><span class="k">3</span><span><b>Check</b> by multiplying back out.</span></li>
+        </ul>
+        <div class="rules" style="grid-template-columns:minmax(0,1fr)">
+          <div class="rule"><div class="f">2 terms: a² − b² = (a − b)(a + b)</div><div class="e">x² − 25 = (x − 5)(x + 5)</div></div>
+          <div class="rule"><div class="f">2 terms: a³ ± b³</div><div class="e">x³ + 8 = (x + 2)(x² − 2x + 4)</div></div>
+          <div class="rule"><div class="f">3 terms: x² + bx + c</div><div class="e">find p·q = c, p + q = b</div></div>
+          <div class="rule"><div class="f">4 terms: grouping</div><div class="e">x³+3x²+2x+6 = (x + 3)(x² + 2)</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="lab" id="frac">
+    <div class="lab-head"><span class="num">TOPIC 5</span><h2>Fractions &amp; rationalization</h2></div>
+    <div class="big-idea"><b>Big idea</b>Algebra fractions follow the same rules as number fractions. To add, cut both into equal-size pieces first (a common denominator).</div>
+    <div class="grid2">
+      <div class="figure">
+        <div class="controls"><button class="btn" id="fracBtn">Cut into sixths</button><button class="btn ghost" id="fracReset">Reset</button></div>
+        <svg id="fracSvg" viewBox="0 0 640 220" role="img" aria-label="Bar model adding one half and one third"></svg>
+        <div class="readout" id="fracRead"></div>
+      </div>
+      <div>
+        <p><b>Cancel factors, never terms.</b> In <span class="math">(x² − 9)/(x + 3)</span>, factor first: <span class="math">(x − 3)(x + 3)/(x + 3) = x − 3</span>. But in <span class="math">(x + 3)/3</span> the 3s can't cancel, because the top 3 is added, not multiplied.</p>
+        <p><b>Rationalizing</b> removes a root from the bottom. Multiply top and bottom by the <b>conjugate</b> (same terms, opposite sign), since (a − b)(a + b) = a² − b² squares the root away.</p>
+        <ul class="steps" id="ratSteps">
+          <li><span class="k">1</span><span>Start: <span class="m">4 / (√5 − 1)</span></span></li>
+          <li class="off"><span class="k">2</span><span>Conjugate of √5 − 1 is <span class="m">√5 + 1</span></span></li>
+          <li class="off"><span class="k">3</span><span>Bottom: <span class="m">(√5)² − 1² = 5 − 1 = 4</span></span></li>
+          <li class="off"><span class="k">4</span><span>Answer: <span class="m">4(√5 + 1)/4 = √5 + 1</span></span></li>
+        </ul>
+        <div class="controls" style="margin-top:10px"><button class="btn" id="ratNext">Next step</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="lab" id="quiz">
+    <div class="lab-head"><span class="num">CHECK</span><h2>Quick quiz</h2></div>
+    <p>Ten questions, one from each idea above. Pick an answer to see if you're right and why.</p>
+    <div id="quizBox"></div>
+    <div class="score"><span>Score <b id="scoreTxt">0 / 10</b></span><span class="meter"><i id="scoreBar"></i></span><button class="btn" id="retry">Start over</button></div>
+  </section>
+
+  <footer>Tip: 10 short problems a day beats 2 hours the night before the exam.</footer>
+</div>
+
+<script>
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a={},txt)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e};
+const clear=s=>{while(s.firstChild)s.removeChild(s.firstChild)};
+const fmt=v=>v<0?"−"+Math.abs(v):""+v;
+
+/* ---------- number line helper ---------- */
+function drawLine(svg,y,min,max,X0=30,X1=610){
+  const X=v=>X0+(v-min)*(X1-X0)/(max-min);
+  svg.appendChild(el("line",{x1:X0-12,y1:y,x2:X1+12,y2:y,class:"s-axis"}));
+  svg.appendChild(el("path",{d:`M${X1+18},${y} l-9,-5 v10z`,fill:"var(--ink)"}));
+  svg.appendChild(el("path",{d:`M${X0-18},${y} l9,-5 v10z`,fill:"var(--ink)"}));
+  for(let v=min;v<=max;v++){
+    svg.appendChild(el("line",{x1:X(v),y1:y-5,x2:X(v),y2:y+5,class:"s-tick"}));
+    if(v%2===0)svg.appendChild(el("text",{x:X(v),y:y+22,"text-anchor":"middle",class:"s-lbl"},fmt(v)));
+  }
+  return X;
+}
+function dot(svg,x,y,filled){svg.appendChild(el("circle",{cx:x,cy:y,r:7,class:"s-dot",fill:filled?"var(--blue)":"var(--card)"}))}
+
+/* ---------- 1. inequality ---------- */
+let ineq={op:"<",v:3,flipped:false};
+const flipOp={"<":">",">":"<","≤":"≥","≥":"≤"};
+function renderIneq(){
+  const s=document.getElementById("lineSvg");clear(s);
+  const X=drawLine(s,55,-10,10);
+  const {op,v}=ineq, left=op==="<"||op==="≤", inc=op.includes("≤")||op.includes("≥");
+  s.appendChild(el("line",{x1:X(v),y1:55,x2:left?X(-10)-12:X(10)+12,y2:55,class:"s-shade"}));
+  dot(s,X(v),55,inc);
+  s.appendChild(el("text",{x:X(v),y:30,"text-anchor":"middle",class:"s-lbl-b"},fmt(v)));
+  const iv=left?`(−∞, ${fmt(v)}${inc?"]":")"}`:`${inc?"[":"("}${fmt(v)}, ∞)`;
+  document.getElementById("ineqRead").innerHTML=`x ${op} ${fmt(v)} <span class="dim">→</span> ${iv}`;
+  document.querySelectorAll("#ineqOp button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.op===op));
+  document.getElementById("ineqVal").value=v;
+}
+document.querySelectorAll("#ineqOp button").forEach(b=>b.onclick=()=>{ineq.op=b.dataset.op;renderIneq()});
+document.getElementById("ineqVal").oninput=e=>{ineq.v=+e.target.value;renderIneq()};
+document.getElementById("flipBtn").onclick=()=>{
+  const before=`x ${ineq.op} ${fmt(ineq.v)}`;
+  ineq.op=flipOp[ineq.op];ineq.v=-ineq.v;renderIneq();
+  document.getElementById("flipCap").innerHTML=`Multiplying <b>${before}</b> by −1 gives <b>−x ${flipOp[ineq.op]} ${fmt(-ineq.v)}</b>, which is the same as <b>x ${ineq.op} ${fmt(ineq.v)}</b>. The sign flipped and the shading moved to the other side.`;
+};
+renderIneq();
+
+/* ---------- 2. absolute value ---------- */
+let ab={op:"=",c:0,a:3};
+function renderAbs(){
+  const s=document.getElementById("absSvg");clear(s);
+  const y=95, X=drawLine(s,y,-10,10);
+  const {op,c,a}=ab, L=c-a, R=c+a;
+  if(op==="<")s.appendChild(el("line",{x1:X(L),y1:y,x2:X(R),y2:y,class:"s-shade"}));
+  if(op===">"){s.appendChild(el("line",{x1:X(L),y1:y,x2:X(-10)-12,y2:y,class:"s-shade"}));s.appendChild(el("line",{x1:X(R),y1:y,x2:X(10)+12,y2:y,class:"s-shade"}));}
+  // distance arcs
+  [[c,L],[c,R]].forEach(([p,q])=>{
+    const mx=(X(p)+X(q))/2;
+    s.appendChild(el("path",{d:`M${X(p)},${y-8} Q${mx},${y-62} ${X(q)},${y-8}`,fill:"none",stroke:"var(--hi)","stroke-width":3,"stroke-dasharray":"5 4"}));
+    s.appendChild(el("text",{x:mx,y:y-40,"text-anchor":"middle",class:"s-lbl-b"},`${a} steps`));
+  });
+  s.appendChild(el("circle",{cx:X(c),cy:y,r:5,fill:"var(--ink)"}));
+  s.appendChild(el("text",{x:X(c),y:y+40,"text-anchor":"middle",class:"s-lbl-b"},`c = ${fmt(c)}`));
+  dot(s,X(L),y,op==="=");dot(s,X(R),y,op==="=");
+  const lhs=c===0?"|x|":c>0?`|x − ${c}|`:`|x + ${-c}|`;
+  const ans=op==="="?`x = ${fmt(L)} or x = ${fmt(R)}`:op==="<"?`${fmt(L)} &lt; x &lt; ${fmt(R)}`:`x &lt; ${fmt(L)} or x &gt; ${fmt(R)}`;
+  document.getElementById("absRead").innerHTML=`${lhs} ${op==="<"?"&lt;":op===">"?"&gt;":"="} ${a} <span class="dim">→</span> ${ans}`;
+  document.querySelectorAll("#absOp button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.op===op));
+}
+document.querySelectorAll("#absOp button").forEach(b=>b.onclick=()=>{ab.op=b.dataset.op;renderAbs()});
+document.getElementById("absC").oninput=e=>{ab.c=+e.target.value;renderAbs()};
+document.getElementById("absA").oninput=e=>{ab.a=+e.target.value;renderAbs()};
+renderAbs();
+
+/* ---------- 3. exponents ---------- */
+const sup={"-":"⁻","0":"⁰","1":"¹","2":"²","3":"³","4":"⁴"};
+const supS=n=>(""+n).split("").map(ch=>sup[ch]).join("");
+let ex={b:2,sel:0};
+function fracStr(b,n){return n>=0?""+Math.pow(b,n):"1/"+Math.pow(b,-n)}
+function renderExp(){
+  const s=document.getElementById("expSvg");clear(s);
+  const b=ex.b, ns=[-3,-2,-1,0,1,2,3,4], base=240, step=26, x0=60, w=58;
+  // baseline at n=-3 bottom => height = (n+4)*step
+  for(let k=0;k<=8;k++){const yy=base-k*step;s.appendChild(el("line",{x1:x0-8,y1:yy,x2:620,y2:yy,stroke:"var(--line)","stroke-width":1}));}
+  const yOne=base-4*step;
+  s.appendChild(el("line",{x1:x0-8,y1:yOne,x2:620,y2:yOne,stroke:"var(--ink)","stroke-width":1.5,"stroke-dasharray":"4 4"}));
+  s.appendChild(el("text",{x:x0-14,y:yOne+4,"text-anchor":"end",class:"s-lbl-b"},"1"));
+  ns.forEach((n,i)=>{
+    const h=(n+4)*step, x=x0+i*(w+12), sel=n===ex.sel;
+    const r=el("rect",{x,y:base-h,width:w,height:h,rx:4,fill:sel?"var(--hi)":n<0?"var(--blue-soft)":"var(--blue)",stroke:"var(--blue)","stroke-width":1.5,tabindex:0,role:"button","aria-label":`${b} to the power ${n}`});
+    r.style.cursor="pointer";
+    r.addEventListener("click",()=>{ex.sel=n;renderExp()});
+    r.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();ex.sel=n;renderExp()}});
+    s.appendChild(r);
+    s.appendChild(el("text",{x:x+w/2,y:base-h-6,"text-anchor":"middle",class:"s-lbl-b"},fracStr(b,n)));
+    s.appendChild(el("text",{x:x+w/2,y:base+18,"text-anchor":"middle",class:"s-lbl"},b+supS(n)));
+  });
+  const n=ex.sel;
+  let expl;
+  if(n>0)expl=`${b}${supS(n)} = ${Array(n).fill(b).join(" × ")} = ${Math.pow(b,n)}`;
+  else if(n===0)expl=`${b}⁰ = 1 <span class="dim">(divide ${b}¹ by ${b} once more)</span>`;
+  else expl=`${b}${supS(n)} = 1/${b}${supS(-n)} = ${fracStr(b,n)}`;
+  document.getElementById("expRead").innerHTML=expl;
+}
+document.getElementById("expBase").oninput=e=>{ex.b=+e.target.value;renderExp()};
+renderExp();
+
+/* ---------- 4. factoring area model ---------- */
+let fa={p:2,q:3};
+function renderFact(){
+  const s=document.getElementById("factSvg");clear(s);
+  const {p,q}=fa, X=150, u=26, ox=90, oy=40;
+  const W=X+p*u, H=X+q*u;
+  const rect=(x,y,w,h,fill,label)=>{s.appendChild(el("rect",{x,y,width:w,height:h,fill,stroke:"var(--ink)","stroke-width":1.5}));
+    s.appendChild(el("text",{x:x+w/2,y:y+h/2+5,"text-anchor":"middle",class:"s-lbl-b"},label));};
+  rect(ox,oy,X,X,"var(--blue-soft)","x²");
+  rect(ox+X,oy,p*u,X,"var(--hi-soft)",p+"x");
+  rect(ox,oy+X,X,q*u,"var(--hi-soft)",q+"x");
+  rect(ox+X,oy+X,p*u,q*u,"var(--good-soft)",""+p*q);
+  // unit grid in the small pieces
+  for(let i=1;i<p;i++)s.appendChild(el("line",{x1:ox+X+i*u,y1:oy,x2:ox+X+i*u,y2:oy+H,stroke:"var(--line)","stroke-width":1}));
+  for(let j=1;j<q;j++)s.appendChild(el("line",{x1:ox,y1:oy+X+j*u,x2:ox+W,y2:oy+X+j*u,stroke:"var(--line)","stroke-width":1}));
+  // side labels
+  s.appendChild(el("text",{x:ox+X/2,y:oy-12,"text-anchor":"middle",class:"s-lbl-b"},"x"));
+  s.appendChild(el("text",{x:ox+X+p*u/2,y:oy-12,"text-anchor":"middle",class:"s-lbl-b"},"+"+p));
+  s.appendChild(el("text",{x:ox-14,y:oy+X/2+5,"text-anchor":"end",class:"s-lbl-b"},"x"));
+  s.appendChild(el("text",{x:ox-14,y:oy+X+q*u/2+5,"text-anchor":"end",class:"s-lbl-b"},"+"+q));
+  // summary box
+  const tx=ox+W+40;
+  const lines=[["Area pieces:",""],[`x² + ${p}x + ${q}x + ${p*q}`,"b"],["",""],["Check:",""],[`${p} × ${q} = ${p*q}  (= c)`,"b"],[`${p} + ${q} = ${p+q}  (= b)`,"b"]];
+  lines.forEach((l,i)=>s.appendChild(el("text",{x:tx,y:oy+20+i*24,class:l[1]?"s-lbl-b":"s-lbl"},l[0])));
+  document.getElementById("factRead").innerHTML=`x² + ${p+q}x + ${p*q} = (x + ${p})(x + ${q})`;
+  document.querySelectorAll("#factPick button").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.p===p&&+b.dataset.q===q));
+}
+document.querySelectorAll("#factPick button").forEach(b=>b.onclick=()=>{fa={p:+b.dataset.p,q:+b.dataset.q};renderFact()});
+renderFact();
+
+/* ---------- 5. fraction bars ---------- */
+let cut=false;
+function renderFrac(){
+  const s=document.getElementById("fracSvg");clear(s);
+  const x0=110,W=480,h=36;
+  const bar=(y,label,parts,filled,col)=>{
+    s.appendChild(el("text",{x:x0-14,y:y+h/2+5,"text-anchor":"end",class:"s-lbl-b"},label));
+    for(let i=0;i<parts;i++){
+      s.appendChild(el("rect",{x:x0+i*W/parts,y,width:W/parts,height:h,fill:i<filled?col:"var(--card)",stroke:"var(--ink)","stroke-width":1.5}));
+    }
+  };
+  if(!cut){
+    bar(20,"1/2",2,1,"var(--blue)");
+    bar(76,"1/3",3,1,"var(--hi)");
+    s.appendChild(el("text",{x:x0,y:150,class:"s-lbl"},"Different-size pieces can't be counted together yet."));
+    document.getElementById("fracRead").innerHTML=`1/2 + 1/3 = ? <span class="dim">(pieces don't match)</span>`;
+  }else{
+    bar(20,"3/6",6,3,"var(--blue)");
+    bar(76,"2/6",6,2,"var(--hi)");
+    // sum bar
+    s.appendChild(el("text",{x:x0-14,y:132+h/2+5,"text-anchor":"end",class:"s-lbl-b"},"5/6"));
+    for(let i=0;i<6;i++)s.appendChild(el("rect",{x:x0+i*W/6,y:132,width:W/6,height:h,fill:i<3?"var(--blue)":i<5?"var(--hi)":"var(--card)",stroke:"var(--ink)","stroke-width":1.5}));
+    s.appendChild(el("text",{x:x0,y:198,class:"s-lbl"},"Same-size pieces: now just count them. 3 + 2 = 5 sixths."));
+    document.getElementById("fracRead").innerHTML=`1/2 + 1/3 = 3/6 + 2/6 = 5/6`;
+  }
+}
+document.getElementById("fracBtn").onclick=()=>{cut=true;renderFrac()};
+document.getElementById("fracReset").onclick=()=>{cut=false;renderFrac()};
+renderFrac();
+let rs=1;
+document.getElementById("ratNext").onclick=()=>{
+  const li=document.querySelectorAll("#ratSteps li");
+  if(rs>=li.length){rs=1;li.forEach((l,i)=>l.classList.toggle("off",i>0));document.getElementById("ratNext").textContent="Next step";return}
+  li[rs].classList.remove("off");rs++;
+  if(rs>=li.length)document.getElementById("ratNext").textContent="Start again";
+};
+
+/* ---------- quiz ---------- */
+const Q=[
+ ["Solve −2x > 8.",["x > −4","x < −4","x > 4","x < 4"],1,"Divide by −2 and flip the sign: x < −4."],
+ ["Which interval means −1 < x ≤ 5?",["[−1, 5]","(−1, 5)","(−1, 5]","[−1, 5)"],2,"−1 is not included → round bracket; 5 is included → square bracket."],
+ ["Solve |x − 2| = 6.",["x = 8 only","x = 8 or x = −4","x = −8 or x = 4","No solution"],1,"Distance 6 from 2: 2 + 6 = 8 and 2 − 6 = −4."],
+ ["Which describes |x| < 3?",["x < −3 or x > 3","−3 < x < 3","x < 3","No solution"],1,"'Less than' means inside: one piece between −3 and 3."],
+ ["What is 2⁻³?",["−8","−6","1/8","1/6"],2,"A negative power flips to a fraction: 1/2³ = 1/8."],
+ ["Simplify x⁴ · x³.",["x⁷","x¹²","2x⁷","x"],0,"Same base multiplied → add the powers: 4 + 3 = 7."],
+ ["What is 16^(1/2)?",["8","4","32","1/16"],1,"Power 1/2 means square root: √16 = 4."],
+ ["Factor x² + 7x + 10.",["(x + 1)(x + 10)","(x + 2)(x + 5)","(x − 2)(x − 5)","(x + 3)(x + 4)"],1,"2 × 5 = 10 and 2 + 5 = 7."],
+ ["Factor x² − 49.",["(x − 7)²","(x + 7)²","(x − 7)(x + 7)","Doesn't factor"],2,"Difference of squares: a² − b² = (a − b)(a + b)."],
+ ["Rationalize 6/√2.",["3√2","6√2","√2/6","3"],0,"Multiply by √2/√2: 6√2/2 = 3√2."]
+];
+let answered=0,correct=0;
+function buildQuiz(){
+  const box=document.getElementById("quizBox");box.innerHTML="";answered=0;correct=0;updateScore();
+  Q.forEach((q,i)=>{
+    const d=document.createElement("div");d.className="q";
+    d.innerHTML=`<h3><span class="qn">Q${i+1}</span>${q[0]}</h3><div class="opts"></div><div class="fb" aria-live="polite"></div>`;
+    const opts=d.querySelector(".opts"),fb=d.querySelector(".fb");
+    q[1].forEach((t,j)=>{const b=document.createElement("button");b.id=`q${i}o${j}`;b.textContent=t;
+      b.onclick=()=>{
+        opts.querySelectorAll("button").forEach((x,k)=>{x.disabled=true;if(k===q[2])x.classList.add("right")});
+        if(j===q[2]){correct++;fb.innerHTML=`<b class="ok">Correct.</b> ${q[3]}`}
+        else{b.classList.add("wrong");fb.innerHTML=`<b class="no">Not quite.</b> ${q[3]}`}
+        answered++;updateScore();
+      };opts.appendChild(b)});
+    box.appendChild(d);
+  });
+}
+function updateScore(){
+  document.getElementById("scoreTxt").textContent=`${correct} / ${Q.length}`+(answered===Q.length?(correct>=8?" · Excellent!":correct>=5?" · Good, review the misses":" · Revisit the topics and retry"):"");
+  document.getElementById("scoreBar").style.width=(correct/Q.length*100)+"%";
+}
+document.getElementById("retry").onclick=buildQuiz;
+buildQuiz();
+</script>
+
+</body></html>
